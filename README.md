@@ -200,10 +200,26 @@ This project is created for educational purposes as part of a Flutter internship
 
 ---
 
+## Screenshots
+
+### Authentication
+<div align="center">
+  <img src="https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235103.png" width="250" alt="Login Screen"/>
+  <img src="https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235107.png" width="250" alt="Signup Screen"/>
+</div>
+
+### Mood Tracking
+<div align="center">
+  <img src="https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235134.png" width="250" alt="Mood Logger"/>
+  <img src="https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235137.png" width="250" alt="Mood History"/>
+</div>
+
+### Analytics & Features
+<div align="center">
+  <img src="https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235143.png" width="250" alt="Analytics Dashboard"/>
+  <img src="https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235198.png" width="250" alt="Calendar View"/>
+</div>
+
+---
+
 **Built with ❤️ using Flutter**
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235103.png)
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235107.png)
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235134.png)
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235137.png)
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235143.png)
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235198.png)
