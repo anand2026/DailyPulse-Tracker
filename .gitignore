@@ -103,10 +103,6 @@ coverage/
 .env.local
 .env.*.local
 
-# Firebase
-firebase_options.dart
-google-services.json
-GoogleService-Info.plist
 
 # Temporary files
 *.tmp

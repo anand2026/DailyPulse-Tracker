@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "954263127771",
+    "project_id": "auth-login-a170e",
+    "storage_bucket": "auth-login-a170e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954263127771:android:ec04316c257b108e762efe",
+        "android_client_info": {
+          "package_name": "com.dailypulse.daily_pulse_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "954263127771-8guatcski0uf88r0v817pb7vpr3qjdmj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWC72yF81E7CXZ4PUwN-nKkPjykPIv6HA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "954263127771-8guatcski0uf88r0v817pb7vpr3qjdmj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "954263127771-aag0c4kj9blk6rhv05cin84ut1j0jlgq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dailypulse.dailyPulseTracker"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
