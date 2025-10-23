@@ -201,3 +201,4 @@ This project is created for educational purposes as part of a Flutter internship
 ---
 
 **Built with ❤️ using Flutter**
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/image.png)
