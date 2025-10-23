@@ -201,4 +201,9 @@ This project is created for educational purposes as part of a Flutter internship
 ---
 
 **Built with ❤️ using Flutter**
-![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/image.png)
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235103.png)
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235107.png)
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235134.png)
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235137.png)
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235143.png)
+![alt text](https://github.com/anand2026/DailyPulse-Tracker/blob/main/images/Screenshot_1761235198.png)
