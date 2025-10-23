@@ -1,58 +1,105 @@
-import 'package:shared_preferences/shared_preferences.dart';
-import '../models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/user.dart' as model;
 
 class AuthService {
-  static const String _currentUserKey = 'current_user_id';
-  static const String _guestUserId = 'guest_user';
+  final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<User?> getCurrentUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString(_currentUserKey) ?? _guestUserId;
+  Stream<model.User?> get authStateChanges {
+    return _firebaseAuth.authStateChanges().asyncMap((firebaseUser) async {
+      if (firebaseUser == null) return null;
+      return await _getUserFromFirebase(firebaseUser);
+    });
+  }
 
-    return User(
-      id: userId,
-      email: userId == _guestUserId ? null : '$userId@local.com',
-      displayName: userId == _guestUserId ? 'Guest User' : userId,
-      createdAt: DateTime.now(),
+  model.User? get currentUser {
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) return null;
+
+    return model.User(
+      id: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      createdAt: firebaseUser.metadata.creationTime,
       updatedAt: DateTime.now(),
     );
   }
 
-  Future<User?> signUp(String email, String password) async {
-    final userId = email.split('@').first;
-    final user = User(
-      id: userId,
+  Future<model.User> signUp(String email, String password, String displayName) async {
+    final credential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
-      displayName: userId,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      password: password,
     );
 
-    await _saveCurrentUser(userId);
+    await credential.user?.updateDisplayName(displayName);
+
+    final user = model.User(
+      id: credential.user!.uid,
+      email: email,
+      displayName: displayName,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      deleted: false,
+    );
+
+    await user.save();
+    await _saveUserToFirestore(user);
+
     return user;
   }
 
-  Future<User?> signIn(String email, String password) async {
-    final userId = email.split('@').first;
-    final user = User(
-      id: userId,
+  Future<model.User> signIn(String email, String password) async {
+    final credential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
-      displayName: userId,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
+      password: password,
     );
 
-    await _saveCurrentUser(userId);
+    final user = await _getUserFromFirebase(credential.user!);
+    await user.save();
+
     return user;
   }
 
   Future<void> signOut() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_currentUserKey);
+    await _firebaseAuth.signOut();
   }
 
-  Future<void> _saveCurrentUser(String userId) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_currentUserKey, userId);
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> updateProfile(String displayName) async {
+    final firebaseUser = _firebaseAuth.currentUser;
+    if (firebaseUser == null) throw Exception('No user logged in');
+
+    await firebaseUser.updateDisplayName(displayName);
+
+    final user = model.User(
+      id: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: displayName,
+      createdAt: firebaseUser.metadata.creationTime,
+      updatedAt: DateTime.now(),
+    );
+
+    await user.save();
+    await _saveUserToFirestore(user);
+  }
+
+  // ===== SUPPORTIVE FUNCTIONS =====
+
+  Future<model.User> _getUserFromFirebase(firebase_auth.User firebaseUser) async {
+    return model.User(
+      id: firebaseUser.uid,
+      email: firebaseUser.email,
+      displayName: firebaseUser.displayName,
+      createdAt: firebaseUser.metadata.creationTime,
+      updatedAt: DateTime.now(),
+    );
+  }
+
+  Future<void> _saveUserToFirestore(model.User user) async {
+    await _firestore.collection('users').doc(user.id).set(user.toMap());
   }
 }

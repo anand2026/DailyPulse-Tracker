@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import '../../../app/route_endpoints.dart';
 import '../../../app/theme.dart';
-import '../../mood_tracker/providers/mood_entries_provider.dart';
+import '../providers/auth_provider.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -14,6 +15,7 @@ class SignupScreen extends ConsumerStatefulWidget {
 
 class _SignupScreenState extends ConsumerState<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _displayNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -21,6 +23,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
 
   @override
   void dispose() {
+    _displayNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -37,15 +40,33 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       await authService.signUp(
         _emailController.text.trim(),
         _passwordController.text,
+        _displayNameController.text.trim(),
       );
 
       if (mounted) {
         context.go(AppRouteEndpoints.home);
       }
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      if (mounted) {
+        String message = 'Signup failed';
+        if (e.code == 'weak-password') {
+          message = 'The password is too weak';
+        } else if (e.code == 'email-already-in-use') {
+          message = 'An account already exists with this email';
+        } else if (e.code == 'invalid-email') {
+          message = 'Invalid email address';
+        } else if (e.code == 'operation-not-allowed') {
+          message = 'Email/password accounts are not enabled';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Signup failed: ${e.toString()}')),
+          SnackBar(content: Text('An error occurred: ${e.toString()}')),
         );
       }
     } finally {
@@ -95,6 +116,23 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 48),
+                  TextFormField(
+                    controller: _displayNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Display Name',
+                      prefixIcon: Icon(Icons.person_outline),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your name';
+                      }
+                      if (value.length < 2) {
+                        return 'Name must be at least 2 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,

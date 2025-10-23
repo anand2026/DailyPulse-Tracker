@@ -15,7 +15,7 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE mood_entries (
@@ -30,6 +30,31 @@ class DatabaseHelper {
             deleted INTEGER DEFAULT 0
           )
         ''');
+
+        await db.execute('''
+          CREATE TABLE users (
+            id TEXT PRIMARY KEY,
+            email TEXT,
+            displayName TEXT,
+            createdAt TEXT,
+            updatedAt TEXT,
+            deleted INTEGER DEFAULT 0
+          )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+              id TEXT PRIMARY KEY,
+              email TEXT,
+              displayName TEXT,
+              createdAt TEXT,
+              updatedAt TEXT,
+              deleted INTEGER DEFAULT 0
+            )
+          ''');
+        }
       },
     );
   }

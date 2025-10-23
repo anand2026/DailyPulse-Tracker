@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import '../../../app/route_endpoints.dart';
 import '../../../app/theme.dart';
-import '../../mood_tracker/providers/mood_entries_provider.dart';
+import '../providers/auth_provider.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -40,10 +41,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (mounted) {
         context.go(AppRouteEndpoints.home);
       }
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      if (mounted) {
+        String message = 'Login failed';
+        if (e.code == 'user-not-found') {
+          message = 'No user found with this email';
+        } else if (e.code == 'wrong-password') {
+          message = 'Incorrect password';
+        } else if (e.code == 'invalid-email') {
+          message = 'Invalid email address';
+        } else if (e.code == 'user-disabled') {
+          message = 'This account has been disabled';
+        } else if (e.code == 'too-many-requests') {
+          message = 'Too many attempts. Please try again later';
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed: ${e.toString()}')),
+          SnackBar(content: Text('An error occurred: ${e.toString()}')),
         );
       }
     } finally {

@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/mood_entry.dart';
 import '../services/mood_service.dart';
-import '../../auth/services/auth_service.dart';
+import '../../auth/providers/auth_provider.dart';
 
-final authServiceProvider = Provider((ref) => AuthService());
 final moodServiceProvider = Provider((ref) => MoodService());
 
 final moodEntriesProvider = StateNotifierProvider<MoodEntriesNotifier, AsyncValue<List<MoodEntry>>>((ref) {
@@ -25,7 +24,7 @@ class MoodEntriesNotifier extends StateNotifier<AsyncValue<List<MoodEntry>>> {
 
       try {
         final authService = _ref.read(authServiceProvider);
-        final user = await authService.getCurrentUser();
+        final user = authService.currentUser;
         if (user != null && user.id != null) {
           userId = user.id!;
         }

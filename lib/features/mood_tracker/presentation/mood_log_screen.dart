@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../app/theme.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../models/mood_entry.dart';
 import '../providers/mood_entries_provider.dart';
 
@@ -39,7 +40,7 @@ class _MoodLogScreenState extends ConsumerState<MoodLogScreen> {
 
       try {
         final authService = ref.read(authServiceProvider);
-        final user = await authService.getCurrentUser();
+        final user = authService.currentUser;
         if (user != null && user.id != null) {
           userId = user.id!;
         }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../app/route_endpoints.dart';
 import '../../../app/theme.dart';
 import '../../../app/theme_provider.dart';
+import '../../auth/providers/auth_provider.dart';
 import '../models/mood_entry.dart';
 import '../providers/mood_entries_provider.dart';
 
